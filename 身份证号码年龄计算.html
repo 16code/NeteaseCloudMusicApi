@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>身份证号码计算年龄</title>
+    <style>*{box-sizing:border-box}html,body{height:100%}body{font-size:14px;background:#fafafa}input{display:block;width:100%;padding:10px 12px;border-radius:4px;margin-bottom:15px;line-height:1;font-size:15px;font-weight:normal}input{border:1px solid #DDD;transition:box-shadow 250ms cubic-bezier(.27,.01,.38,1.06),border 250ms cubic-bezier(.27,.01,.38,1.06)}input:focus{color:#495057;background-color:#fff;border-color:#007bff;box-shadow:0 .313rem .719rem rgba(0,123,255,.1),0 .156rem .125rem rgba(0,0,0,.06);outline:0}input.input-success{border-color:#17c671;box-shadow:0 5px 11.5px rgba(23,198,113,.1)}input.input-error{border-color:#c4183c;box-shadow:0 5px 11.5px rgba(196,24,60,.1)}input.input-error~#result{color:red}.container{width:100%;max-width:500px;padding:20px 30px;margin:100px auto;border-radius:4px;box-shadow:0 0 25px rgba(40,47,60,.05),0 20px 25px rgba(40,47,60,.05),0 3px 4px rgba(40,47,60,.05)}h1{margin:0;text-align:center;font-size:22px;font-weight:400;margin-bottom:24px}form{position:relative}.ajax-res{display:flex;justify-content:space-between}#year{color:#fff;border-radius:.375rem;background-color:#17c671;display:inline-block;position:absolute;right:10px;top:8px;padding:3px 6px;font-size:80%}#year:empty{opacity:0}
+</style>
+</head>
+
+<body>
+    <div class="container"><h1>身份证号码年龄计算工具</h1><form name="idCardForm"><input type="text" id="card_id" name="card_id" placeholder="请输入身份证号码"></form></div>
+    <script>"use strict";function AgeCalculate(t){this.inputEle=document.getElementById(t.inputEle),this.outputEle=document.getElementById(t.outputEle)||this.createOutput(t.outputEle),this.inputEle&&this.bindEvent()}AgeCalculate.prototype.createOutput=function(t){if(document.getElementById(t))return document.getElementById(t);var e=document.createElement("div"),u=document.getElementsByName("card_id")[0];return e.id=t||"result",u.parentNode.insertBefore(e,u.nextSibling),e},AgeCalculate.prototype.bindEvent=function(){var t=this;document.getElementById("card_id").value;this.inputEle.addEventListener("keyup",function(e){var u=e.target||e.srcElement,n=u.value,i=t.validValue(n);t.updateUI(i,n)},!1)},AgeCalculate.prototype.updateUI=function(t,e){this.inputEle.classList.remove("input-success"),this.inputEle.classList.remove("input-error"),this.inputEle.classList.add(t?"input-success":"input-error");var u=e.substr(6,8),n=+u.substr(0,4),i=(u.substr(4,2),u.substr(6,2),(new Date).getFullYear()),r=this;t?this.xhr(e,function(t){console.info(t);var e=['<div class="ajax-res">',"<div>"+t.result.area+"</div>","<div>"+t.result.birthday+"("+t.result.sex+")</div>","</div>"];r.outputEle.innerHTML=e.join("\n")}):this.outputEle.innerHTML="身份证号码不合法，请重新填写",this.createOutput("year").innerHTML=t?"<div>"+(i-n)+"岁</div>":""},AgeCalculate.prototype.validValue=function(t){return/^[0-9]{17}([0-9]|x|X){1}$/.test(t)},AgeCalculate.prototype.xhr=function(t,e){fetch("http://api.ihtml.site/idcard?cardno="+t).then(function(t){return t.json()}).then(function(t){e(t)})},new AgeCalculate({inputEle:"card_id",outputEle:"result"});
+    </script>
+</body>
+</html>
