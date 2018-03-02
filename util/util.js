@@ -62,7 +62,6 @@ function createWebAPIRequest(
     }),
     proxy: proxy
   };
-
   request(options, function(error, res, body) {
     if (error) {
       errorcallback(error);
